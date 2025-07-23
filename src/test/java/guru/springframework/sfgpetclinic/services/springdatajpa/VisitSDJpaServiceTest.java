@@ -7,11 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -38,8 +36,8 @@ class VisitSDJpaServiceTest {
 
         when(visitRepository.findAll()).thenReturn(visits);
         Set<Visit> foundVisits = visitSDJpaService.findAll();
-        verify(visitRepository).findAll(); //verify that findAll actually returns visits I guess
-        assertThat(foundVisits).hasSize(2);
+        verify(visitRepository).findAll();
+        assertThat(foundVisits).hasSize(3);
     }
 
     @Test
