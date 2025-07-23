@@ -32,4 +32,4 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - test-java
+      - integration-test
