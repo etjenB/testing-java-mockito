@@ -7,11 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,6 +61,22 @@ class SpecialitySDJpaServiceTest {
         Speciality foundSpeciality = specialitySDJpaService.findById(1l);
         assertThat(foundSpeciality).isNotNull();
         verify(specialtyRepository).findById(1l);
+    }
+
+    @Test
+    void testFindByIdBDD() {
+        //given
+        Speciality speciality = new Speciality();
+        given(specialtyRepository.findById(1l)).willReturn(Optional.of(speciality));
+
+        //when
+        Speciality foundSpeciality = specialitySDJpaService.findById(1l);
+
+        //then
+        assertThat(foundSpeciality).isNotNull();
+        //then(specialtyRepository).should().findById(1l);
+        then(specialtyRepository).should(times(1)).findById(1l);
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 
     @Test
