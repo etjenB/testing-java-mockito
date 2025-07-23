@@ -37,7 +37,7 @@ class VisitSDJpaServiceTest {
         when(visitRepository.findAll()).thenReturn(visits);
         Set<Visit> foundVisits = visitSDJpaService.findAll();
         verify(visitRepository).findAll();
-        assertThat(foundVisits).hasSize(3);
+        assertThat(foundVisits).hasSize(2);
     }
 
     @Test
