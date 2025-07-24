@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerControllerTest {
@@ -28,6 +28,8 @@ class OwnerControllerTest {
     OwnerController controller;
     @Mock
     BindingResult bindingResult;
+    @Mock
+    Model model;
     @Captor
     ArgumentCaptor<String> stringArgumentCaptor;
 
@@ -56,6 +58,7 @@ class OwnerControllerTest {
         String viewName = controller.processFindForm(owner, bindingResult, null);
         assertThat(stringArgumentCaptor.getValue()).isEqualTo("%Buck%");
         assertThat(viewName).isEqualTo("redirect:/owners/1");
+        verifyNoInteractions(model);
     }
 
     @Test
@@ -64,14 +67,19 @@ class OwnerControllerTest {
         String viewName = controller.processFindForm(owner, bindingResult, null);
         assertThat(stringArgumentCaptor.getValue()).isEqualTo("%NNNNN%");
         assertThat(viewName).isEqualTo("owners/findOwners");
+        verifyNoInteractions(model);
     }
 
     @Test
     void processFindFormWildcardStringAnnotationFoundMultiple() {
         Owner owner = new Owner(1L, "Joe", "M");
-        String viewName = controller.processFindForm(owner, bindingResult, Mockito.mock(Model.class));
+        InOrder inOrder = Mockito.inOrder(ownerService, model);
+        String viewName = controller.processFindForm(owner, bindingResult, model);
         assertThat(stringArgumentCaptor.getValue()).isEqualTo("%M%");
         assertThat(viewName).isEqualTo("owners/ownersList");
+        //verify order of calls
+        inOrder.verify(ownerService).findAllByLastNameLike(anyString());
+        inOrder.verify(model, times(1)).addAttribute(anyString(), anyList());
     }
 
     @Test

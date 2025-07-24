@@ -76,7 +76,7 @@ class SpecialitySDJpaServiceTest {
         //then
         assertThat(foundSpeciality).isNotNull();
         //then(specialtyRepository).should().findById(1L);
-        then(specialtyRepository).should(times(1)).findById(1L);
+        then(specialtyRepository).should(timeout(200).times(1)).findById(1L);
         then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 
